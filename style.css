@@ -8,20 +8,30 @@ body {
     font-weight: normal;
 }
 
-html {
+/* ---------Index page styling------------- */
+html{
+    background-color: #81c9e8;
+    margin: 0px;
     overflow: hidden;
 }
 
-/* ---------Index page styling------------- */
-html{
-    background-color:rgb(229, 221, 221);
-    margin: 0px;
+button{
+    margin: 16px;
+    padding: 15px;
+    background-color: #ffaaac;
+    border-radius: 10px;
+    border: 4px solid;
+    border-color: #ff9ea1;
+    border-radius: 8px;
+    font-weight: bold;
+    box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.25);
+    font-size: 24px;
 }
 
 main#homepage{
     padding: 0px;
     margin: 0px;
-    background-color: #3994c8;
+    background-color: #81c9e8;
     display: flex;
     flex-direction: column;
     /* padding-bottom: 0; */
@@ -68,7 +78,7 @@ main#homepage{
 .button-container{
     display: flex;
     justify-content: center;
-    /* gap: 20px;*/
+    background-color: #44a8d3
     max-width: 100%;
     padding: 10px;
 }
@@ -79,19 +89,6 @@ main#homepage{
 }
 #settings-button{
     color: white;
-
-button{
-    margin: 16px;
-    padding: 15px;
-    background-color: #383278;
-    border-radius: 10px;
-    border: 4px solid;
-    border-color: #8B74BD;
-    border-radius: 8px;
-    font-weight: bold;
-    box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.25);
-    font-size: 18px;
-}
 
 button:hover{
     transform:scale(140%);
