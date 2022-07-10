@@ -1,11 +1,11 @@
-*{
-  font-family:"Lucida Console";
-  color: white;
+@font-face{
+   font-family: shakeFont;
+   src: url(fonts/HARLOWSI.ttf);
 }
-body {
-    color: white;
-    margin: 0px;
-    font-weight: normal;
+
+*{
+  font-family:"shakeFont";
+  color: white;
 }
 
 /* ---------Index page styling------------- */
@@ -15,25 +15,44 @@ html{
     overflow: hidden;
 }
 
+body{
+    color: white;
+    margin: 0px;
+    font-weight: normal;
+}
+
 button{
-    margin: 16px;
-    padding: 15px;
-    background-color: #ffaaac;
-    border-radius: 10px;
+    margin: 5px;
+    padding: 10px;
+    background-color: #81c9e8;
+    border-radius: 50px;
     border: 4px solid;
-    border-color: #ff9ea1;
+    border-color: white;
     border-radius: 8px;
     font-weight: bold;
     box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.25);
-    font-size: 24px;
+    font-size: 32px;
+}
+
+button:hover{
+    transform:scale(105%);
+    cursor: pointer;
+}
+
+.footer{
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    margin: 0px;
+    max-height: 5vh;
+    font-weight: normal;
+    align-content: center;
 }
 
 main#homepage{
     padding: 0px;
     margin: 0px;
     background-color: #81c9e8;
-    display: flex;
-    flex-direction: column;
     /* padding-bottom: 0; */
     height: 100%;
     width: 100%;
@@ -51,188 +70,54 @@ main#homepage{
     max-height: 100%;
 }
 
-.animate-floating {
-  /* For title animation functions below */
-  -webkit-animation: floating 2s infinite  alternate;
-  animation: floating 2s infinite  alternate;
-}
-/* Floating Image animation */
-@-webkit-keyframes floating {
-    0% {
-      transform: translateY(0);
-    }
-    100% {
-      transform: translateY(-8px);
-    }
-}
-
-@keyframes floating {
-    0% {
-      transform: translateY(0);
-    }
-    100% {
-      transform: translateY(-8px);
-    }
-}
-
-.button-container{
+.mainpage-view-container{
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    background-color: #44a8d3
+    background-color: white;
+    width: 100%;
+    height: 75vh;
+}
+
+.select-outer-container{
+    display: flex;
+    flex-direction: column;
+    /* align-items: center;
+    align-content: flex-start; */
+    justify-content: center;
+    background-color: #ffd0d2;
     max-width: 100%;
-    padding: 10px;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 50px;
+    box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.select-container{
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    background-color: white;
+    border-radius: 50px;
+    /* box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.25); */
+}
+
+.nav-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    background-color: #44a8d3;
+    max-width: 100%;
+    padding: 20px;
+    margin: 10px;
+    border-radius: 50px;
+    box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.25);
 }
 /* Button Id's for any customized styling */
 /* Only white font right now */
-#locations-button{
+#nav-locations-button{
     color: white;
 }
-#settings-button{
+#nav-settings-button{
     color: white;
-
-button:hover{
-    transform:scale(140%);
-    cursor: pointer;
-}
-
-.footer{
-}
-/*--------------Modal styling----------*/
-
-.hidden{
-    display: none !important;
-}
-
-#modal-backdrop{
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 1;
-    background-color: rgba(0, 0, 0, 0.70);
-}
-
-.modal-skeleton{
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 2;
-}
-
-.modal-contents{
-
-  border-color: #8B74BD;
-  border-radius: 5px;
-  padding: 6px;
-  background-color: #383278;
-  font-weight: bold;
-
-    width: 500px;
-    height: 550px;
-    background-color: #383278;
-    border: 4px solid;
-    border-color: #8B74BD;
-    border-radius: 10%;
-    padding: 6px;
-    margin: 40px auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.modal-header h3{
-    margin: 0px;
-}
-
-.modal-header{
-    border: none;
-    background-color: #8B74BD;
-    border-top-left-radius: 45px;
-    border-top-right-radius: 45px;
-    padding: 10px;
-    padding-left: 30%;
-    font-size: 30px;
-    box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.25);
-
-}
-
-.modal-body{
-    padding-left: 10px;
-    padding-right: 10px;
-    font-size: 16px;
-}
-
-.close-modal-button{
-    width: 20%;
-    background-color: #8B74BD;
-    align-self: flex-end;
-    margin-right: 30px;
-    margin-bottom: 20px;
-    border-radius: 10px;
-}
-
-.close-modal-button:hover{
-    transform: scale(110%);
-}
-
-.small-modal {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: fixed;
-    top:35%;
-    left:35%;
-    max-width: 450px;
-    min-width: 400px;
-    font-weight: bold;
-    font-size:50px;
-    border: 2px solid;
-    border-color: #8B74BD;
-    border-radius: 20px;
-    background-color: #383278;
-    padding: 10px;
-    box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.25);
-}
-
-#input-submitted-screen{
-    font-size: 24px;
-    z-index: 2;
-    text-align: center;
-}
-#input-submitted-buttons{
-    display: flex;
-}
-
-/*Class for fading an element in and out */
-.animate-fading {
-    /* For pause screen animation */
-    -webkit-animation: fading 4s infinite  alternate;
-    animation: fading 4s infinite  alternate;
-}
-/* fade in and out animation */
-@-webkit-keyframes fading {
-    0%   {
-      opacity: 1;
-    }
-    50%  {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
-}
-
-@keyframes fading {
-    0%   {
-      opacity: 1;
-    }
-    50%  {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
-}
