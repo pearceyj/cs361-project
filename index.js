@@ -1,5 +1,5 @@
-var locationButton = document.getElementById('locations-button')
-var settingsButton = document.querySelectorAll('settings-button')
+var locationsButton = document.getElementById('nav-locations-button')
+var settingsButton = document.getElementById('nav-settings-button')
 
 
 locationsButton.addEventListener('click', function(){
