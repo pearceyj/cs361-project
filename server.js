@@ -24,6 +24,10 @@ app.get("/locations", function(req, res) {
     res.status(200).sendFile(path.join(__dirname, 'public/locations.html'))
 })
 
+app.get("/information", function(req, res) {
+    res.status(200).sendFile(path.join(__dirname, 'public/information.html'))
+})
+
 app.listen(port, function() {
     console.log("Listening on port", port)
 })

@@ -129,6 +129,17 @@ main#homepage{
     box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.25);
 }
 
+.cow-container{
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: space-around;
+    background-color: #81c9e8;
+    border-radius: 25px;
+    padding: 10px;
+    box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.25);
+}
+
 .nav-container{
     display: flex;
     flex-direction: row;
@@ -146,6 +157,10 @@ main#homepage{
     color: white;
 }
 
+#nav-info-button{
+    color: white;
+}
+
 #back-button{
     color: white;
 }
@@ -158,6 +173,20 @@ main#homepage{
     color: white;
     background-color: #44a8d3;
     width: 250px;
+}
+
+#page-title{
+    align-self: center;
+    font-size: 42px;
+    margin: 0px;
+}
+
+#info-blurb{
+    display: block;
+    align-self: center;
+    font-size: 24px;
+    padding: 10px;
+    margin-top: -50px;
 }
 
 #weather-checkbox{
@@ -177,19 +206,33 @@ main#homepage{
     background-color: #44a8d3;
     float: right;
     width: 100px;
-    transform : scale(2);
+}
+
+#cow-image{
+    align-self: center;
+    width: 25%;
+    height: 25%;
 }
 
 #distance-input{
     background-color: white;
     display: inline-block;
     vertical-align: middle;
-    color: white;
+    color: black;
     float: right;
     width: 100px;
 }
 
 #my-location{
+    background-color: white;
+    display: inline-block;
+    vertical-align: middle;
+    color: black;
+    float: right;
+    width: 100px;
+}
+
+#alt-location-choice{
     background-color: white;
     display: inline-block;
     vertical-align: middle;
