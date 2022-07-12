@@ -42,6 +42,10 @@ button:hover{
     cursor: pointer;
 }
 
+label {
+  display: inline-block;
+}
+
 .footer{
     background-color: #44a8d3;
     padding: 10px;
@@ -154,4 +158,46 @@ main#homepage{
     color: white;
     background-color: #44a8d3;
     width: 250px;
+}
+
+#weather-checkbox{
+    display: inline-block;
+    vertical-align: middle;
+    color: white;
+    background-color: #44a8d3;
+    float: right;
+    min-width: 250px;
+    transform : scale(2);
+}
+
+#ethic-cow-checkbox{
+    display: inline-block;
+    vertical-align: middle;
+    color: white;
+    background-color: #44a8d3;
+    float: right;
+    width: 100px;
+    transform : scale(2);
+}
+
+#distance-input{
+    background-color: white;
+    display: inline-block;
+    vertical-align: middle;
+    color: white;
+    float: right;
+    width: 100px;
+}
+
+#my-location{
+    background-color: white;
+    display: inline-block;
+    vertical-align: middle;
+    color: white;
+    float: right;
+    width: 100px;
+}
+
+#large-text{
+    font-size: 28px;
 }
