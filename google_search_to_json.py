@@ -42,7 +42,9 @@ def getNames():
     return locationNames
 
 #initialize list for storing location data
-formatList = ['Name', 'Rating', 'Address', 'Hours', "TopReview"]
+#formatList = ['Name', 'Rating', 'Address', 'Hours', "TopReview"]
+#limiting to just names for now, above list is whole thing
+formatList = ['Name']
 locationData = {}
 for i in formatList:
     locationData[i] = None
@@ -71,17 +73,28 @@ locationNames = getNames()
 print(locationNames)
 
 #grab names and store into list
-allLocations = []
-listLength = len(locationNames)
-for i in range (listLength):
+numLocations = len(locationNames)
+#create master lsit to hold all location dictionary info
+allLocations = [{} for sub in range(numLocations)]
+for i in range (numLocations):
     print(locationNames[i])
-    #allLocations.append(locationData)
-    locationData['Name'] = locationNames[i]
-    allLocations.append(json.dumps(locationData))
-# for location in locationData:
-#     print(locationData[location])
+    allLocations[i]['Name'] = locationNames[i]
+
+#Print out the stored values to confirm valid
 for i in range(len(allLocations)):
     print(allLocations[i])
+
+#Dump the data in JSON format for writing to file
+# final = json.dumps(allLocations, indent=4)
+#Open the file and write the data
+with open('locationData.json', 'w') as outfile:
+    json.dump(allLocations, outfile, indent = 4)
+
+with open('locationData.json', 'r') as infile:
+    locations = json.loads(infile.read())
+for name in locations:
+    print(name)
+
 
 # listing = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.XPATH, "//span[@class='OSrXXb']")))
 # listing = driver.find_element(By.CLASS_NAME, 'OSrXXb')
