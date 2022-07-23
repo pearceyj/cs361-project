@@ -17,6 +17,7 @@ import json #for exporting locationData to json
 
 def getNames():
     try:
+        #Wait for main div to appear before searching
         main = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CLASS_NAME, 'main'))
         )
@@ -57,7 +58,8 @@ PATH = "C:\Program Files (x86)\chromedriver.exe"
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 #open google for search
 driver.get("https://www.google.com")
-#print(driver.title)
+#prints the title of the driver
+print(driver.title)
 
 #specified location [city, state] to search
 city_state_name = 'Albany, Oregon'
@@ -65,10 +67,11 @@ city_state_name = 'Albany, Oregon'
 search_box = driver.find_element('name', 'q')
 #Search string with the requested city, state
 search_box.send_keys('Restaurants with milkshakes in'  + city_state_name)
+#enter the search, like pressing enter
 search_box.submit()
 
 #print(driver.page_source)
-#Wait for main div to appear before searching
+
 locationNames = getNames()
 print(locationNames)
 
@@ -94,12 +97,3 @@ with open('locationData.json', 'r') as infile:
     locations = json.loads(infile.read())
 for name in locations:
     print(name)
-
-
-# listing = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.XPATH, "//span[@class='OSrXXb']")))
-# listing = driver.find_element(By.CLASS_NAME, 'OSrXXb')
-# for elem in listing:
-#     print("Location name" + listing.text)
-
-#"//span[@class='OSrXXb']" ##location in html of top 3 results
-#driver.close() #closes the webpage
