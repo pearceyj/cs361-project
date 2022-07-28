@@ -78,14 +78,21 @@ print(locationNames)
 #grab names and store into list
 numLocations = len(locationNames)
 #create master lsit to hold all location dictionary info
+milkshakes = ''
 allLocations = [{} for sub in range(numLocations)]
 for i in range (numLocations):
     print(locationNames[i])
     allLocations[i]['Name'] = locationNames[i]
+    milkshakes += locationNames[i] + ','
+
+print(milkshakes)
+
+
 
 #Print out the stored values to confirm valid
 for i in range(len(allLocations)):
     print(allLocations[i])
+
 
 #Dump the data in JSON format for writing to file
 # final = json.dumps(allLocations, indent=4)
