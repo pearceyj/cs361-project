@@ -3,10 +3,25 @@ How to use Micro Service Note:
 
 REQUEST
 
-Add MilkshakeRpcClient() class in the main body of your application
-Instantiate MilkshakeRpcClient object in backend
-Use function to cal .call() method of class object or call it directly passing in location string
-String must be city i.e. "Sandiego" or city and state seperated with comma and without spacing i.e. "Sandiego,CA"
+You must create a  MilkshakeRpcClient() class in the main body of your application
+
+Be sure to declare a MilkshakeRpcClient object in backend
+
+Pass in the location as the sole argument to the .call() function on your MilkshakeRpcClient class object.
+
+String does not need to adhere to stric syntax, but the more specific the better the results you will recieve.
+
+EXAMPLE:
+
+#Testing request milkshake location service; sends location by city, state
+milkshake_rpc = MilkshakeRpcClient()
+
+response = milkshake_rpc.call("Redding, California")
+
+#You must strip the first 2 chars from the respons string, due to how RabbitMQ places body-designating chars at the beginning. It is also important to remove the null terminator at the end of the string, before the response may be loaded as a JSON.USe the method below:
+
+response = response[2:-1]
+print(" [.] Got %r" % json.loads(response))
 
 RECIEVE
 
