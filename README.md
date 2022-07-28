@@ -50,3 +50,4 @@ JSON file containing a dictionary with the following keys (values for example, t
   
 Note: this service does not cache previous results, and may take up to 10 seconds to recieve a response due to the use of a webdriver that powers the web-scraping process.
   
+![MyMilkshakesUML](https://user-images.githubusercontent.com/86382179/181436708-d2e8d528-3bd7-47e1-a021-03702198aefa.png)
