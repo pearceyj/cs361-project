@@ -57,27 +57,53 @@ def searchCityState(city_state):
         locations = body.find_elements(By.CLASS_NAME, 'rllt__details')
         #Grab the names of the restaurant results, store them in list and print
         locationNames = []
-        locationString = ''
         for location in locations:
             restaurant_name = location.find_element(By.CLASS_NAME, 'OSrXXb')
             locationNames.append(restaurant_name.text)
-
-        restaurants = str()
-        listLength = len(locationNames)
-        for name in range (listLength):
-            print(locationNames[name])
-            restaurants += locationNames[name] + ','
-        restaurants = restaurants[:-1]
-
-
     except:
         print("Something went wrong")
+        return None
     finally:
         driver.quit()
 
+        #grab names and store into list
+        numLocations = len(locationNames)
+        #create master lsit to hold all location dictionary info
+
+        allLocations = [{} for sub in range(numLocations)]
+        for i in range (numLocations):
+            print(locationNames[i])
+            allLocations[i]['Name'] = locationNames[i]
+
+        #Print out the stored values to confirm valid
+        for i in range(len(allLocations)):
+            print(allLocations[i])
+
+        #Directly write in values becuase they always come in 3's
+        locationDict = {
+            "loc1" : None,
+            "loc2" : None,
+            "loc3" : None
+        }
+        #Strip apostrophes because RabbitMQ sends json as string and we get errors
+        locationDict["loc1"] = locationNames[0].replace("'","").replace('"', '')
+        locationDict["loc2"] = locationNames[1].replace("'","").replace('"', '')
+        locationDict["loc3"] = locationNames[2].replace("'","").replace('"', '')
+        #Dump the data in JSON format for writing to file
+        with open('locationData.json', 'w') as outfile:
+            json.dump(allLocations, outfile, indent = 4)
+            print("Creating JSON file from location data...")
+        #Open the file and write the data
+        # with open('locationData.json', 'r') as infile:
+        #     locations = json.loads(infile.read())
+        #     print("Testing onload...\n%r", locations)
+
+        #locationDataJson = json.dumps(locationDict, indent=4)
+        #locationsStr = str(locationDataJson)
+
     #print(locationNames)
     #return locationNames
-    return restaurants
+    return locationDict
 
 
 #RabbitMQ
@@ -103,15 +129,16 @@ def callback(ch, method, props, body):
         state = bod_str[(commaPos+1):]
         city_state = city + ', ' + state
 
-    locationNames = searchCityState(city_state)
+    locationNames = (searchCityState(city_state))
 
-    if city_state != None:
+    if locationNames != None:
         response = locationNames
+        print("Returning 'LocationData.json' to sender!")
     else:
         response = "Request Failed"
 
     ch.basic_publish(exchange='', routing_key=props.reply_to,
-        properties=pika.BasicProperties(correlation_id = props.correlation_id),body=str(response))
+        properties=pika.BasicProperties(correlation_id = props.correlation_id),body=json.dumps(response))
 
     ch.basic_ack(delivery_tag=method.delivery_tag)
 

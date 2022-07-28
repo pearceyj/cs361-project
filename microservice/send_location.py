@@ -2,6 +2,7 @@
 #!/usr/bin/env python
 import pika
 import uuid
+import json
 
 class MilkshakeRpcClient(object):
 
@@ -40,9 +41,11 @@ class MilkshakeRpcClient(object):
         self.connection.process_data_events(time_limit=None)
         return str(self.response)
 
+#Testing request milkshake location service; sends location by city, state
 milkshake_rpc = MilkshakeRpcClient()
 
 response = milkshake_rpc.call("Redding, California")
-restaurantNames = str(response)
-print(" [.] Got %r" % response)
-print(restaurantNames)
+print(response)
+#MUST STRIP THE BODY CHARS ADDED BY RABBIT MQ, AND NULL TERMINATOR
+response = response[2:-1]
+print(" [.] Got %r" % json.loads(response))

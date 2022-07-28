@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>My Milkshakes</title>
+        <link rel="stylesheet" href="style.css">
+        <script type = "text/javascript"
+        src="{{ url_for('static', filename = 'index.js') }}"></script>
+
+    </head>
+
+    <body>
+
+        <main id="homepage tiled-sprinkles">
+            <div id="app-name">
+                <img id="title-img" src="./images/title_mymilkshakes_alpha_shadow.png" alt="My Milkshakes.">
+            </div>
+            <div id="mainpage-view-container" class="tiled-sprinkles">
+                <div class="nav-container">
+                    <button id="nav-locations-button">Locations</button>
+                    <button id="nav-info-button">Information</button>
+                    <button id="nav-settings-button">Settings</button>
+                </div>
+                <div class="select-outer-container">
+                    <div class="cow-container">
+                        <button id="select-choice-button">McDonald's</button>
+                        <button id="select-choice-button">Burgerville</button>
+                        <button id="select-choice-button">Dairy Queen</button>
+                        <button id="select-choice-button">Shake Shack</button>
+                    </div>
+                </div>
+            </div>
+            <!-- <div id="mainpage-view-container:after" class="footer">Jordan Pearcey | Oregon State University | CS 361</div> -->
+        </main>
+    </body>
+</html>
