@@ -59,7 +59,8 @@ def searchCityState(city_state):
         locationNames = []
         for location in locations:
             restaurant_name = location.find_element(By.CLASS_NAME, 'OSrXXb')
-            locationNames.append(restaurant_name.text)
+            if restaurant_name is not None:
+                locationNames.append(restaurant_name.text)
     except:
         print("Something went wrong")
         return None

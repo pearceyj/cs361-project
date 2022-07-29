@@ -1,9 +1,25 @@
+# how to use css in python_ flask
+# flask render_template example
+
 from flask import Flask, render_template
-app = Flask(__name__)
+
+# WSGI Application
+# Provide template folder name
+# The default folder name should be "templates" else need to mention custom folder name
+app = Flask(__name__, template_folder='templates', static_folder='static')
+
+# @app.route('/')
+# def welcome():
+#     return "This is the home page of Flask Application"
 
 @app.route('/')
 def index():
-   return render_template('index.html')
+    return render_template('index.html')
 
-if __name__ == '__main__':
-   app.run(debug = True)
+
+@app.route('/settings')
+def settings():
+    return render_template('settings.html')
+
+if __name__=='__main__':
+    app.run(debug = True)
