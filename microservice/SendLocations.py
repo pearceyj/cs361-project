@@ -44,7 +44,7 @@ class MilkshakeRpcClient(object):
 #Testing request milkshake location service; sends location by city, state
 milkshake_rpc = MilkshakeRpcClient()
 
-response = milkshake_rpc.call("Redding, California")
+response = milkshake_rpc.call("seattle")
 print(response)
 #MUST STRIP THE BODY CHARS ADDED BY RABBIT MQ, AND NULL TERMINATOR
 response = response[2:-1]

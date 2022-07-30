@@ -43,8 +43,6 @@ def searchCityState(city_state):
     #enter the search, like pressing enter
     search_box.submit()
 
-    #print(driver.page_source)
-
     try:
         #Wait for main div to appear before searching
         main = WebDriverWait(driver, 10).until(
@@ -61,6 +59,8 @@ def searchCityState(city_state):
             restaurant_name = location.find_element(By.CLASS_NAME, 'OSrXXb')
             if restaurant_name is not None:
                 locationNames.append(restaurant_name.text)
+            else:
+                print("There was a problem finding location names")
     except:
         print("Something went wrong")
         return None
@@ -87,23 +87,15 @@ def searchCityState(city_state):
             "loc3" : None
         }
         #Strip apostrophes because RabbitMQ sends json as string and we get errors
-        locationDict["loc1"] = locationNames[0].replace("'","").replace('"', '')
-        locationDict["loc2"] = locationNames[1].replace("'","").replace('"', '')
-        locationDict["loc3"] = locationNames[2].replace("'","").replace('"', '')
+        if locationNames is not None:
+            locationDict["loc1"] = locationNames[0].replace("'","").replace('"', '')
+            locationDict["loc2"] = locationNames[1].replace("'","").replace('"', '')
+            locationDict["loc3"] = locationNames[2].replace("'","").replace('"', '')
         #Dump the data in JSON format for writing to file
         with open('locationData.json', 'w') as outfile:
             json.dump(allLocations, outfile, indent = 4)
             print("Creating JSON file from location data...")
-        #Open the file and write the data
-        # with open('locationData.json', 'r') as infile:
-        #     locations = json.loads(infile.read())
-        #     print("Testing onload...\n%r", locations)
 
-        #locationDataJson = json.dumps(locationDict, indent=4)
-        #locationsStr = str(locationDataJson)
-
-    #print(locationNames)
-    #return locationNames
     return locationDict
 
 
