@@ -14,8 +14,11 @@ import json
 #Alternate chrome webdriver PATH setup:
 #PATH = "C:\Program Files (x86)\chromedriver.exe"
 #driver = webdriver.Chrome(PATH)
+options = Options(); #make browser headless/windowless
+options.add_argument("--headless")
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
-def searchCityState(city_state):
+def searchCityState(city_state, driver=driver):
     """
     Recieves: city_state in format "City, State"
     Returns:  locationData of top 3 milkshake location in area, as dictionary
@@ -26,9 +29,7 @@ def searchCityState(city_state):
         locationData[i] = None
 
 
-    options = Options(); #make browser headless/windowless
-    options.add_argument("--headless")
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+
     driver.get("https://www.google.com")
     search_box = driver.find_element('name', 'q')#Google search bar
     search_box.send_keys('Restaurants with milkshakes in'  + city_state)
@@ -106,7 +107,7 @@ def callback(ch, method, props, body):
         state = bod_str[(commaPos+1):]
         city_state = city + ', ' + state
 
-    locationNames = (searchCityState(city_state))
+    locationNames = (searchCityState(city_state, driver))
 
     if locationNames != None:
         response = locationNames
