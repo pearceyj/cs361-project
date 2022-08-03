@@ -5,7 +5,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>My Milkshakes</title>
-        <link rel="stylesheet" href="/static/style.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename = 'style.css') }}">
         <script type = "text/javascript"
         src="{{ url_for('static', filename = 'index.js') }}"></script>
 
@@ -24,12 +24,7 @@
                     <button id="nav-settings-button">Settings</button>
                 </div>
                 <div class="select-outer-container">
-                    <div class="cow-container">
-                        <button id="select-choice-button">McDonald's</button>
-                        <button id="select-choice-button">Burgerville</button>
-                        <button id="select-choice-button">Dairy Queen</button>
-                        <button id="select-choice-button">Shake Shack</button>
-                    </div>
+                    {% block content %}{% endblock %}
                 </div>
             </div>
             <!-- <div id="mainpage-view-container:after" class="footer">Jordan Pearcey | Oregon State University | CS 361</div> -->
