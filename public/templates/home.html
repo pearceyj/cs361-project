@@ -1,8 +1,14 @@
 {% extends "index.html" %}
 {% block content %}
     <div class="cow-container">
+    {% if response != None %}
+        {% for loc in locData %}
+            <button id="select-choice-button">{{ locData[loc] }}</button>
+        {% endfor %}
+    {% else %}
         <button id="select-choice-button">McDonald's</button>
         <button id="select-choice-button">Burgerville</button>
         <button id="select-choice-button">Dairy Queen</button>
+    {% endif %}
     </div>
 {% endblock %}

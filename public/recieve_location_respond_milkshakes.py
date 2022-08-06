@@ -12,11 +12,11 @@ import time
 import json
 
 #Alternate chrome webdriver PATH setup:
-#PATH = "C:\Program Files (x86)\chromedriver.exe"
-#driver = webdriver.Chrome(PATH)
+PATH = "C:\\Users\\GilliganMuscaria\\Documents\\school\\summer22\\CS_361\\Team_23\\Assignment_3\\cs361-project\\public\\chromedriver.exe"
 options = Options(); #make browser headless/windowless
 options.add_argument("--headless")
-driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+driver = webdriver.Chrome(PATH, options=options)
+#driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
 def searchCityState(city_state, driver=driver):
     """
@@ -55,15 +55,15 @@ def searchCityState(city_state, driver=driver):
     finally:
         driver.quit()
 
-    numLocations = len(locationNames)
-    allLocations = [{} for sub in range(numLocations)]
-    for i in range (numLocations):
-        print(locationNames[i])
-        allLocations[i]['Name'] = locationNames[i]
-
-    #Print out the stored values to confirm valid
-    for i in range(len(allLocations)):
-        print(allLocations[i])
+    # numLocations = len(locationNames)
+    # allLocations = [{} for sub in range(numLocations)]
+    # for i in range (numLocations):
+    #     print(locationNames[i])
+    #     allLocations[i]['Name'] = locationNames[i]
+    #
+    # #Print out the stored values to confirm valid
+    # for i in range(len(allLocations)):
+    #     print(allLocations[i])
 
     #Directly write in values becuase they always come in 3's
     locationDict = {
