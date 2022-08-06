@@ -1,0 +1,18 @@
+{% extends "index.html" %}
+{% block content %}
+<div class="menu-view-container">
+    <form method="POST" action="">
+        <fieldset id="large-text">
+            <div id="my-location">
+                {{ form.location.label()}}
+                {{ form.location()}}
+            </div>
+        </fieldset>
+        <div>
+            <div>
+                {{ form.submit(class="btn")}}
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

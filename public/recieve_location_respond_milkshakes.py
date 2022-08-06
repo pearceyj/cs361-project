@@ -88,8 +88,8 @@ def searchCityState(city_state, driver=driver):
 connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
 channel = connection.channel()
 
-channel.queue_declare(queue='myQueue')
-channel.queue_purge('myQueue')
+channel.queue_declare(queue='myMilkShakes')
+channel.queue_purge('myMilkShakes')
 def callback(ch, method, props, body):
     """
     Messaging queue. Recieves location and responds with milkshake Restaurants
@@ -121,7 +121,7 @@ def callback(ch, method, props, body):
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
 channel.basic_qos(prefetch_count=1)
-channel.basic_consume(queue='myQueue', on_message_callback=callback)
+channel.basic_consume(queue='myMilkShakes', on_message_callback=callback)
 
 print(' [*] Waiting for messages. To exit press CTRL+C')
 channel.start_consuming()

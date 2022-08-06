@@ -1,34 +1,47 @@
 # how to use css in python_ flask
 # flask render_template example
 
-from flask import Flask, render_template
+from flask import Flask, render_template, flash, redirect, request
+from forms import SettingsForm
 import json
 import SendLocations
-
-# WSGI Application
-# Provide template folder name
-# The default folder name should be "templates" else need to mention custom folder name
 app = Flask(__name__, template_folder='templates', static_folder='static')
 
-# @app.route('/')
-# def welcome():
-#     return "This is the home page of Flask Application"
+app.config['SECRET_KEY'] = '5d8d01ee0f29e7ad312f7ce37568e551'
+
+
+
+
 
 @app.route('/')
-def index():
-    return render_template('home.html')
+def home():
+    return render_template('home.html', title='Home')
 
 
 @app.route('/settings')
 def settings():
-    return render_template('settings.html')
+    return render_template('settings.html', title='Settings')
 
-# milkshake_rpc = SendLocations.MilkshakeRpcClient()
-# #
-# response = milkshake_rpc.call("Albany, Oregon")
-# # #MUST STRIP THE BODY CHARS ADDED BY RABBIT MQ, AND NULL TERMINATOR
-# response = response[2:-1]
-# print(" [.] Got %r" % json.loads(response))
+
+@app.route('/settings_input', methods=['POST', 'GET'])
+def settings_input():
+    if request.method == 'GET':
+        form = SettingsForm()
+        #return f"The location /data is accessed directly. Try going to '/settings_input' to submit location"
+        return render_template('settings_input.html', title='settings_input', form=form)
+    if request.method == 'POST':
+        form = SettingsForm()
+        form_data = request.form.get('location')
+        print(form_data)
+        milkshake_rpc = SendLocations.MilkshakeRpcClient()
+        response = milkshake_rpc.call(form_data)
+        # #MUST STRIP THE BODY CHARS ADDED BY RABBIT MQ, AND NULL TERMINATOR
+        response = response[2:-1]
+        print(" [.] Got %r" % json.loads(response))
+        return render_template('settings_input.html', title='settings_input', form=form)
+
+
+
 
 if __name__=='__main__':
     app.run(debug = True)
