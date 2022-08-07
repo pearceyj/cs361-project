@@ -15,7 +15,7 @@ with open('locationData.json', 'r') as f:
 milkshake_rpc = SendLocations.MilkshakeRpcClient()
 
 @app.route('/')
-@app.route('/<arg_name>')
+@app.route('/home', methods=['POST', 'GET'])
 def home():
     if locData:
         return render_template('home.html', title='Home', locData=locData)
