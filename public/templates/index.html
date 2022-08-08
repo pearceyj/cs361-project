@@ -6,27 +6,37 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>My Milkshakes</title>
         <link rel="stylesheet" href="{{ url_for('static', filename = 'style.css') }}">
-        <script type = "text/javascript"
-        src="{{ url_for('static', filename = 'index.js') }}"></script>
+        <script type = "text/javascript" src="{{ url_for('static', filename = 'index.js') }}"></script>
 
     </head>
 
     <body>
+        <!-- Main title image-->
         <main id="homepage tiled-sprinkles">
             <div id="app-name">
                 <img id="title-img" src="/static/images/title_mymilkshakes_alpha_shadow.png" alt="My Milkshakes.">
             </div>
-            <div id="nav-view-container">
-                <div class="nav-container">
-                    <button id="nav-locations-button">Locations</button>
-                    <button id="nav-info-button">Information</button>
-                    <button id="nav-settings-button">Settings</button>
+            <!-- Display for the milkshake weather message -->
+            <div id="weather-view-container">
+                <div class="weather-container">
+                    {% block weather %}{% endblock %}
                 </div>
             </div>
+            <!-- navigation bar for whole site -->
+            <div id="nav-view-container">
+                <div class="nav-container">
+                    <button type="button" id="nav-settings-button" onclick="window.location.href='{{ url_for( 'home') }}';">Home</button>
+                    <button type="button" id="nav-locations-button" onclick="window.location.href='{{ url_for( 'locations') }}';">Locations</button>
+                    <button type="button" id="nav-info-button" onclick="window.location.href='{{ url_for( 'information') }}';">Information</button>
+                    <button type="button" id="nav-settings-button" onclick="window.location.href='{{ url_for( 'settings') }}';">Settings</button>
+                </div>
+            </div>
+            <!-- Container for the milkshake location choices-->
             <div id="menu-view-container" class="tiled-sprinkles">
                 <div class="select-outer-container">
                     {% block content %}{% endblock %}
                 </div>
+                <!-- Footer information-->
                 <div id="footer-view-container" class="footer">
                     <div>Jordan Pearcey | Oregon State University | CS 361</div>
                 </div>

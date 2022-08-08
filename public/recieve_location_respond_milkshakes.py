@@ -12,23 +12,23 @@ import time
 import json
 
 #Alternate chrome webdriver PATH setup:
-PATH = "C:\\Users\\GilliganMuscaria\\Documents\\school\\summer22\\CS_361\\Team_23\\Assignment_3\\cs361-project\\public\\chromedriver.exe"
-options = Options(); #make browser headless/windowless
-options.add_argument("--headless")
-driver = webdriver.Chrome(PATH, options=options)
 #driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
-def searchCityState(city_state, driver=driver):
+def searchCityState(city_state, driver=None):
     """
     Recieves: city_state in format "City, State"
     Returns:  locationData of top 3 milkshake location in area, as dictionary
     """
+    #Alternate chrome webdriver PATH setup:
+    PATH = "C:\\Users\\GilliganMuscaria\\Documents\\school\\summer22\\CS_361\\Team_23\\Assignment_3\\cs361-project\\public\\chromedriver.exe"
+    options = Options(); #make browser headless/windowless
+    options.add_argument("--headless")
+    driver = webdriver.Chrome(PATH, options=options)
+
     formatList = ['Name']
     locationData = {}
     for i in formatList:
         locationData[i] = None
-
-
 
     driver.get("https://www.google.com")
     search_box = driver.find_element('name', 'q')#Google search bar
@@ -55,16 +55,10 @@ def searchCityState(city_state, driver=driver):
     finally:
         driver.quit()
 
-    # numLocations = len(locationNames)
-    # allLocations = [{} for sub in range(numLocations)]
-    # for i in range (numLocations):
-    #     print(locationNames[i])
-    #     allLocations[i]['Name'] = locationNames[i]
-    #
-    # #Print out the stored values to confirm valid
-    # for i in range(len(allLocations)):
-    #     print(allLocations[i])
+    return locationNames
 
+
+def locationJson(locationNames):
     #Directly write in values becuase they always come in 3's
     locationDict = {
         "loc1" : None,
@@ -107,9 +101,10 @@ def callback(ch, method, props, body):
         state = bod_str[(commaPos+1):]
         city_state = city + ', ' + state
 
-    locationNames = (searchCityState(city_state, driver))
+    locationNames = (searchCityState(city_state))
+    locationJson = locationJson(locationNames)
 
-    if locationNames != None:
+    if locationJson != None:
         response = locationNames
         print("Returning 'LocationData.json' to sender!")
     else:

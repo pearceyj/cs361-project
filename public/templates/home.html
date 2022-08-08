@@ -1,7 +1,7 @@
 {% extends "index.html" %}
 {% block content %}
     <div class="cow-container">
-    {% if response != None %}
+    {% if locData != None %}
         {% for loc in locData %}
             <button id="select-choice-button">{{ locData[loc] }}</button>
         {% endfor %}
@@ -9,6 +9,16 @@
         <button id="select-choice-button">McDonald's</button>
         <button id="select-choice-button">Burgerville</button>
         <button id="select-choice-button">Dairy Queen</button>
+    {% endif %}
+    </div>
+{% endblock %}
+
+{% block weather %}
+    <div class="weather-container">
+    {% if weatherData != None %}
+        <p>{{ weatherData }}</p>
+    {% else %}
+        <p>Testing Weather Message</p>
     {% endif %}
     </div>
 {% endblock %}

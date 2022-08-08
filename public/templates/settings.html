@@ -1,29 +1,9 @@
 {% extends "home.html" %}
 {% block content %}
-        <div class="select-container">
-            <label id="large-text">
-                <input type="checkbox" id="weather-checkbox">
-                    Shake Weather
-                </input>
-                <br><br>
-            </label>
-            <label id="large-text">
-                <input type="text" id="distance-input">
-                    Search Distance
-                </input>
-                <br><br>
-            </label>
-            <label id="large-text">
-                <input input type="checkbox" id="ethic-cow-checkbox">
-                    Show Ethic Cow
-                </input>
-                <br><br>
-            </label>
-            <label id="large-text">
-                <input input type="text" id="my-location">
-                    My Location
-                </input>
-                <br><br>
-            </label>
-        </div>
+    <form action="#" class="select-container" method="POST">
+        <p><label id="large-text"><input type="checkbox" id="checkbox-style">Shake Weather</input></label></p>
+        <p><label id="large-text"><input input type="checkbox" id="checkbox-style">Show Ethic Cow</input>
+        </label></p><p><label id="large-text"><input input type="text" name="location-input" id="my-location">My Location</input>
+        </label></p><p><label id="large-text"><input input type="submit" value="submit"></input></label></p>
+    </form>
 {% endblock %}
