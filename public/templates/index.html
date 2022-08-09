@@ -11,6 +11,16 @@
     </head>
 
     <body>
+        <!-- popup modal for settings -->
+        <div class="bg-modal">
+            <div class="select-outer-container">
+                <div class=".close">+</div>
+                <form action="#" class="select-container" method="POST">
+                    <p><label id="large-text">My Location<input input type="text" name="modal-input" id="my-location"></input></label></p>
+                    <p><input input type="submit" value="submit" placeholder="City"></input></p>
+                </form>
+            </div>
+        </div>
         <!-- Main title image-->
         <main id="homepage tiled-sprinkles">
             <div id="app-name">
@@ -23,12 +33,11 @@
                 </div>
             </div>
             <!-- navigation bar for whole site -->
-            <div id="nav-view-container">
+            <div id="modal-view-container">
                 <div class="nav-container">
-                    <button type="button" id="nav-settings-button" onclick="window.location.href='{{ url_for( 'home') }}';">Home</button>
-                    <button type="button" id="nav-locations-button" onclick="window.location.href='{{ url_for( 'locations') }}';">Locations</button>
-                    <button type="button" id="nav-info-button" onclick="window.location.href='{{ url_for( 'information') }}';">Information</button>
-                    <button type="button" id="nav-settings-button" onclick="window.location.href='{{ url_for( 'settings') }}';">Settings</button>
+                    <button type="button" id="nav-button" onclick="window.location.href='{{ url_for( 'home') }}';">Home</button>
+                    <button type="button" id="nav-button" onclick="window.location.href='{{ url_for( 'information') }}';">Information</button>
+                    <button type="button" id="nav-button" onclick="window.location.href='{{ url_for( 'settings') }}';">Settings</button>
                 </div>
             </div>
             <!-- Container for the milkshake location choices-->

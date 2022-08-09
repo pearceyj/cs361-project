@@ -37,7 +37,7 @@ def callback(ch, method, props, body):
             description = weather['list'][0]['weather'][0]['description']
             print(feels_like)
             print(description)
-            if int(feels_like)>=85 and (description=='clear sky' or description=="few clouds"):
+            if int(feels_like)>=75 and (description=='clear sky' or description=="few clouds"):
                 response = "It is Milkshake Weather"
             else:
                 response = "Not Milkshake Weather"
@@ -57,5 +57,3 @@ channel.basic_consume(queue='myQueue', on_message_callback=callback)
 
 print(' [*] Waiting for messages. To exit press CTRL+C')
 channel.start_consuming()
-
-

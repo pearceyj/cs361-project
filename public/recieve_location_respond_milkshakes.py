@@ -24,14 +24,9 @@ def searchCityState(city_state, driver=None):
     options = Options(); #make browser headless/windowless
     options.add_argument("--headless")
     driver = webdriver.Chrome(PATH, options=options)
-
-    formatList = ['Name']
-    locationData = {}
-    for i in formatList:
-        locationData[i] = None
-
+    #Initiate search terms
     driver.get("https://www.google.com")
-    search_box = driver.find_element('name', 'q')#Google search bar
+    search_box = driver.find_element('name', 'q')
     search_box.send_keys('Restaurants with milkshakes in'  + city_state)
     search_box.submit()
 
@@ -78,12 +73,12 @@ def locationJson(locationNames):
     return locationDict
 
 
-#RabbitMQ
+#RabbitMQ, initialize communication pipeline
 connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
 channel = connection.channel()
-
 channel.queue_declare(queue='myMilkShakes')
 channel.queue_purge('myMilkShakes')
+
 def callback(ch, method, props, body):
     """
     Messaging queue. Recieves location and responds with milkshake Restaurants
@@ -91,32 +86,24 @@ def callback(ch, method, props, body):
     """
     bod_str = str(body)
 
-    commaPos = bod_str.find(",")
-    if commaPos == -1:
-        bod_str = bod_str[1:]
-        print(bod_str)
-        city_state = bod_str
-    else:
-        city = bod_str[0:commaPos]
-        state = bod_str[(commaPos+1):]
-        city_state = city + ', ' + state
-
+    #perform the web scraping search, format results, and send message through channel
     locationNames = (searchCityState(city_state))
-    locationJson = locationJson(locationNames)
+    locationFormatted = locationJson(locationNames)
 
-    if locationJson != None:
-        response = locationNames
-        print("Returning 'LocationData.json' to sender!")
+    if locationFormatted != None:
+        response = locationFormatted
+        print("Generating reponse!")
     else:
         response = "Request Failed"
+        return "Something went wrong with response. Delivery failed."
     #Important to dump json here for JSON to send properly, must load on other end
     ch.basic_publish(exchange='', routing_key=props.reply_to,
         properties=pika.BasicProperties(correlation_id = props.correlation_id),body=json.dumps(response))
 
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
+#Begin consuming incoming messages indefinitely
 channel.basic_qos(prefetch_count=1)
 channel.basic_consume(queue='myMilkShakes', on_message_callback=callback)
-
 print(' [*] Waiting for messages. To exit press CTRL+C')
 channel.start_consuming()

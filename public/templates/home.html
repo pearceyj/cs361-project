@@ -14,11 +14,11 @@
 {% endblock %}
 
 {% block weather %}
-    <div class="weather-container">
+    <div class="side-scroll">
     {% if weatherData != None %}
         <p>{{ weatherData }}</p>
     {% else %}
-        <p>Testing Weather Message</p>
+        <p>Enter Location in Settings to see Message!</p>
     {% endif %}
     </div>
 {% endblock %}
