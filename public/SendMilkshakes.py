@@ -14,37 +14,23 @@ app.config['SECRET_KEY'] = '5d8d01ee0f29e7ad312f7ce37568e551'
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
+    #From initial location input when user first visits site
     if request.method == 'POST':
         if request.form.get('modal-location'):
-            loc_data = request.form.get('modal-location')
-            locationInfo = getLocationInformation(loc_data)
-            session["location-data"] = locationInfo
-            milkshakeInfo = getMilkshakeWeather(loc_data)
-            session["weather-data"] = milkshakeInfo
+            updateLocation(session, request.form.get('modal-location'))
             return redirect(url_for('home'))
     return render_template('home.html', title='index', locData=None, weatherData=None, showCow=None, showWeather="off", showLocationModal = True)
 
 
 @app.route('/home', methods=['POST', 'GET'])
 def home():
+    #When coming from settings page
     if request.method == 'POST':
-        if request.method == 'POST':
-            cowBox = request.form.get('cow-box')
-            print(cowBox)
-            session["cow-box"] = cowBox
-            weatherBox = request.form.get('weather-box')
-            print(weatherBox)
-            session["weather-box"] = weatherBox
-            #Search the restuaraunt choices from loc_data and store session
-            if request.form.get('location-input'):
-                loc_data = request.form.get('location-input')
-                print(loc_data)
-                locationInfo = getLocationInformation(loc_data)
-                session["location-data"] = locationInfo
-                #Search the milkshake weather from loc_data and store session
-                milkshakeInfo = getMilkshakeWeather(loc_data)
-                session["weather-data"] = milkshakeInfo
-    #Load session data, otherwise load cached data and render home page
+        updateWeatherOption(session, request.form.get('weather-box'))
+        updateCowOption(session, request.form.get('cow-box'))
+        if request.form.get('location-input'):
+            updateLocation(session, request.form.get('location-input'))
+    #Load session data or cached data and render home page
     locData = retrieveLocationData()
     weatherData = retrieveWeatherData(session)
     showCow = retrieveShowCow(session)
@@ -57,21 +43,11 @@ def settings():
     if request.method == 'GET':
         return render_template('settings.html', title='Settings')
     if request.method == 'POST':
-        cowBox = request.form.get('cow-box')
-        print(cowBox)
-        session["cow-box"] = cowBox
-        weatherBox = request.form.get('weather-box')
-        print(weatherBox)
-        session["weather-box"] = weatherBox
+        updateWeatherOption(session, request.form.get('weather-box'))
+        updateCowOption(session, request.form.get('cow-box'))
         #Search the restuaraunt choices from loc_data and store session
         if request.form.get('location-input'):
-            loc_data = request.form.get('location-input')
-            print(loc_data)
-            locationInfo = getLocationInformation(loc_data)
-            session["location-data"] = locationInfo
-            #Search the milkshake weather from loc_data and store session
-            milkshakeInfo = getMilkshakeWeather(loc_data)
-            session["weather-data"] = milkshakeInfo
+            updateLocation(session, request.form.get('location-input'))
     return redirect(url_for('home'))
     # return render_template('settings.html', title='Settings')
 
@@ -123,11 +99,33 @@ def retrieveWeatherData(session):
     return weatherData
 
 
+def updateLocation(session, locData):
+    print('Updating location and weather message from form input')
+    print(loc_data)
+    locationInfo = getLocationInformation(loc_data)
+    session["location-data"] = locationInfo
+    #Search the milkshake weather from loc_data and store session
+    milkshakeInfo = getMilkshakeWeather(loc_data)
+    session["weather-data"] = milkshakeInfo
+
+
+def updateWeatherOption(session, weatherBox):
+    print('Updating weather message option')
+    print("weatherBox option: ", weatherBox)
+    session["weather-box"] = weatherBox
+
+
+def updateCowOption(session, cowBox):
+    print('Updating review cow option')
+    print("cowBox option: ", cowBox)
+    session["cow-box"] = cowBox
+
+
 def retrieveLocationData():
     locData = None
     if os.path.isfile('./locationData.json'):
         with open('locationData.json', 'r') as f:
-            print("Reading locationData from JSON")
+            print("Reading cached locationData")
             locData = json.loads(f.read())
     return locData
 

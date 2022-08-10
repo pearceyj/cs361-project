@@ -11,44 +11,23 @@ from webdriver_manager.chrome import ChromeDriverManager
 import time
 import json
 
-#Alternate chrome webdriver PATH setup:
-#driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+#webdriver path for local driver use (default in function is to download)
+PATH = "C:\\Users\\GilliganMuscaria\\Documents\\school\\summer22\\CS_361\\Team_23\\Assignment_3\\cs361-project\\public\\chromedriver.exe"
 
 def searchCityState(city_state, driver=None):
-    """
-    Recieves: city_state in format "City, State"
-    Returns:  locationData of top 3 milkshake location in area, as dictionary
-    """
-    #Alternate chrome webdriver PATH setup:
-    PATH = "C:\\Users\\GilliganMuscaria\\Documents\\school\\summer22\\CS_361\\Team_23\\Assignment_3\\cs361-project\\public\\chromedriver.exe"
-    options = Options(); #make browser headless/windowless
-    options.add_argument("--headless")
-    driver = webdriver.Chrome(PATH, options=options)
+    #if not passed in, default driver is installed from chrome server (slower)
+    if driver == None:
+        driver = getUpdatedDriver()
+
     #Initiate search terms
+    searchId = 'q' #google search box identifier
     driver.get("https://www.google.com")
-    search_box = driver.find_element('name', 'q')
-    search_box.send_keys('Restaurants with milkshakes in'  + city_state)
+    search_box = driver.find_element('name', searchId)
+    search_box.send_keys('Restaurants with milkshakes in' + city_state)
     search_box.submit()
 
-    try:
-        #Wait 10 secs for main div to appear before searching
-        main = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.CLASS_NAME, 'main'))
-        )
-        body = main.find_element(By.CLASS_NAME, 'e9EfHf') #Main body div
-        locations = body.find_elements(By.CLASS_NAME, 'rllt__details')#contains locations
-        locationNames = []
-        for location in locations:
-            restaurant_name = location.find_element(By.CLASS_NAME, 'OSrXXb')
-            if restaurant_name is not None:
-                locationNames.append(restaurant_name.text)
-            else:
-                print("There was a problem finding location names")
-    except:
-        print("Something went wrong")
-        return None
-    finally:
-        driver.quit()
+    namesId = 'OSrXXb' #div class on page that hold restaurant names
+    locationNames = getLocationNames(driver, namesId)
 
     return locationNames
 
@@ -73,6 +52,51 @@ def locationJson(locationNames):
     return locationDict
 
 
+def getUpdatedDriver(options=None):
+    #default options are windowless/headless browser
+    if options == None:
+        options = Options();
+        options.add_argument("--headless")
+    print("Installing current web driver...")
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+    print("Web driver installed!")
+    return driver
+
+
+def initWebDriver(path=None):
+    options = Options();
+    options.add_argument("--headless")
+    if path == None:
+        driver = getUpdatedDriver(options)
+    else:
+        driver = webdriver.Chrome(path, options=options)
+    return driver
+
+
+def getLocationNames(driver, div):
+    try:
+        #Wait 10 secs for main div to appear before searching
+        main = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CLASS_NAME, 'main'))
+        )
+        body = main.find_element(By.CLASS_NAME, 'e9EfHf') #Main body div
+        locations = body.find_elements(By.CLASS_NAME, 'rllt__details')#contains locations
+        locationNames = []
+        for location in locations:
+            restaurant_name = location.find_element(By.CLASS_NAME, div)
+            if restaurant_name is not None:
+                locationNames.append(restaurant_name.text)
+                print(restaurant_name.text)
+            else:
+                print("There was a problem finding location names")
+    except:
+        print("Something went wrong with location search...")
+        return None
+    finally:
+        driver.quit()
+
+    return locationNames
+
 #RabbitMQ, initialize communication pipeline
 connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
 channel = connection.channel()
@@ -86,8 +110,10 @@ def callback(ch, method, props, body):
     """
     bod_str = str(body)
 
+
+    driver = initWebDriver(PATH)
     #Scrape locations, format results, and send message through channel
-    locationNames = (searchCityState(bod_str))
+    locationNames = (searchCityState(bod_str, driver=driver))
     locationFormatted = locationJson(locationNames)
 
     if locationFormatted != None:
