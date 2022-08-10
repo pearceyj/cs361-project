@@ -24,3 +24,17 @@
         </div>
     {% endif %}
 {% endblock %}
+
+{% block modal %}
+    {% if showModal == True %}
+<!-- popup modal for settings -->
+    <div class="bg-modal">
+        <div class="settings-container">
+            <form action="#"  method="POST">
+                <p><label id="large-text" class="settings-table">My Location<input input type="text" name="modal-location" id="my-location" placeholder="City"></input></label></p>
+                <p><input input type="submit" value="submit"></input></p>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}

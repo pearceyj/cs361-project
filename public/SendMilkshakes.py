@@ -12,9 +12,25 @@ app = Flask(__name__, template_folder='templates', static_folder='static')
 app.config['SECRET_KEY'] = '5d8d01ee0f29e7ad312f7ce37568e551'
 
 
-@app.route('/')
+@app.route('/', methods=['POST', 'GET'])
+def index():
+    if request.method == 'POST':
+        if request.form.get('modal-location'):
+            loc_data = request.form.get('modal-location')
+            print(loc_data)
+            locationInfo = getLocationInformation(loc_data)
+            session["location-data"] = locationInfo
+            #Search the milkshake weather from loc_data and store session
+            milkshakeInfo = getMilkshakeWeather(loc_data)
+            session["weather-data"] = milkshakeInfo
+            return redirect(url_for('home'))
+    return render_template('home.html', title='index', locData=None, weatherData=None, showCow=None, showWeather="off", showModal = True)
+
+
 @app.route('/home', methods=['POST', 'GET'])
 def home():
+
+    #Get initial location entry from popup location modal
 
     #Load session data, otherwise load cached data and render home page
     locData = retrieveLocationData()
@@ -45,8 +61,8 @@ def settings():
             #Search the milkshake weather from loc_data and store session
             milkshakeInfo = getMilkshakeWeather(loc_data)
             session["weather-data"] = milkshakeInfo
-
-    return render_template('settings.html', title='Settings')
+    return redirect(url_for('home'))
+    # return render_template('settings.html', title='Settings')
 
 
 @app.route('/locations', methods=['POST', 'GET'])
@@ -141,6 +157,8 @@ def retrieveShowWeather(session):
         print("Reading showWeather from Session")
         showWeather = session["weather-box"]
     return showWeather
+
+
 
 
 if __name__=='__main__':
