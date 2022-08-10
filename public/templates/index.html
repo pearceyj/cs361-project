@@ -11,7 +11,8 @@
     </head>
 
     <body>
-        {% block modal %}{% endblock %}
+        {% block locationModal %}{% endblock %}
+        {% block settingsModal %}{% endblock %}
         <!-- Main title image-->
         <main id="homepage tiled-sprinkles">
             <div id="app-name">
@@ -28,7 +29,14 @@
                 <div class="nav-container">
                     <button type="button" id="nav-button" onclick="window.location.href='{{ url_for( 'home') }}';">Home</button>
                     <button type="button" id="nav-button" onclick="window.location.href='{{ url_for( 'information') }}';">Information</button>
-                    <button type="button" id="nav-button" onclick="window.location.href='{{ url_for( 'settings') }}';">Settings</button>
+                    <!-- <button type="button" id="nav-button" onclick="window.location.href='{{ url_for( 'settings') }}';">Settings</button> -->
+                    <button type="button" id="nav-button" onclick="toggle_settingsModal()">Settings</button>
+                    <script type="text/javascript">
+                        function toggle_settingsModal(){
+                            modal = document.querySelector('.settings-modal');
+                            modal.style.visibility = 'visible'
+                        }
+                    </script>
                 </div>
             </div>
             <!-- Container for the milkshake location choices-->

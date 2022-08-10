@@ -1,0 +1,20 @@
+
+{% block locationModal %}
+    <form action="#" class="settings-container" method="POST">
+        <p>
+            <label id="large-text" class="settings-table">Show Shake Weather</label>
+            <input type="checkbox" id="checkbox-style" name="weather-box"></input>
+        </p>
+        <p>
+            <label id="large-text" class="settings-table">Show Review Cow</label>
+            <input input type="checkbox" id="checkbox-style" name="cow-box"></input>
+        </p>
+        <p>
+            <label id="large-text" class="settings-table">My Location</label>
+            <input input type="text" name="location-input" id="my-location" placeholder="Enter city"></input>
+        </p>
+        <p>
+            <input input type="submit" value="submit"></input>
+        </p>
+    </form>
+{% endblock %}

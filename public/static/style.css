@@ -187,9 +187,10 @@ main#homepage{
     display: flex;
     flex-shrink: 1;
     /* flex: 1; */
-    flex-direction: column;
+    flex-direction: row;
     justify-content:center;
     align-items:center;
+    flex-wrap: wrap;
     background-color: #ffe1e2;
     height: 60vh;
     max-height: 100vh;
@@ -234,6 +235,11 @@ main#homepage{
     border-color: None;
     padding: 15px;
     box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+
+.settings-modal {
+    visibility: hidden;
 }
 
 .settings-table {
@@ -399,6 +405,7 @@ main#homepage{
     height: 100%;
     background-color: rgba(0, 0, 0, 0.7);
     position: absolute;
+    z-index: 3;
     top: 0;
     display: flex;
     justify-content: center;

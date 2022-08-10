@@ -25,9 +25,9 @@
     {% endif %}
 {% endblock %}
 
-{% block modal %}
-    {% if showModal == True %}
-<!-- popup modal for settings -->
+{% block locationModal %}
+    {% if showLocationModal == True %}
+    <!-- popup modal for initial location input-->
     <div class="bg-modal">
         <div class="settings-container">
             <form action="#"  method="POST">
@@ -37,4 +37,11 @@
         </div>
     </div>
     {% endif %}
+{% endblock %}
+
+{% block settingsModal %}
+    <div class="bg-modal settings-modal">
+        <!-- popup modal for settings -->
+        {% include 'settingsModal.html' %}
+    </div>
 {% endblock %}

@@ -17,27 +17,38 @@ def index():
     if request.method == 'POST':
         if request.form.get('modal-location'):
             loc_data = request.form.get('modal-location')
-            print(loc_data)
             locationInfo = getLocationInformation(loc_data)
             session["location-data"] = locationInfo
-            #Search the milkshake weather from loc_data and store session
             milkshakeInfo = getMilkshakeWeather(loc_data)
             session["weather-data"] = milkshakeInfo
             return redirect(url_for('home'))
-    return render_template('home.html', title='index', locData=None, weatherData=None, showCow=None, showWeather="off", showModal = True)
+    return render_template('home.html', title='index', locData=None, weatherData=None, showCow=None, showWeather="off", showLocationModal = True)
 
 
 @app.route('/home', methods=['POST', 'GET'])
 def home():
-
-    #Get initial location entry from popup location modal
-
+    if request.method == 'POST':
+        if request.method == 'POST':
+            cowBox = request.form.get('cow-box')
+            print(cowBox)
+            session["cow-box"] = cowBox
+            weatherBox = request.form.get('weather-box')
+            print(weatherBox)
+            session["weather-box"] = weatherBox
+            #Search the restuaraunt choices from loc_data and store session
+            if request.form.get('location-input'):
+                loc_data = request.form.get('location-input')
+                print(loc_data)
+                locationInfo = getLocationInformation(loc_data)
+                session["location-data"] = locationInfo
+                #Search the milkshake weather from loc_data and store session
+                milkshakeInfo = getMilkshakeWeather(loc_data)
+                session["weather-data"] = milkshakeInfo
     #Load session data, otherwise load cached data and render home page
     locData = retrieveLocationData()
     weatherData = retrieveWeatherData(session)
     showCow = retrieveShowCow(session)
     showWeather = retrieveShowWeather(session)
-
     return render_template('home.html', title='Home', locData=locData, weatherData=weatherData, showCow=showCow, showWeather=showWeather)
 
 
@@ -73,28 +84,6 @@ def locations():
 @app.route('/information', methods=['POST', 'GET'])
 def information():
     return render_template('information.html', title='Information')
-
-
-@app.route('/settings_input', methods=['POST', 'GET'])
-def settings_input():
-    if request.method == 'GET':
-        form = SettingsForm()
-        #return f"The location /data is accessed directly. Try going to '/settings_input' to submit location"
-        return render_template('settings_input.html', title='settings_input', form=form)
-    if request.method == 'POST':
-        #Check settings form input and use 'location' entry to call microservice
-        form = SettingsForm()
-        form_data = request.form.get('location')
-        print(form_data)
-        milkshake_rpc = SendLocations.MilkshakeRpcClient()
-        response = milkshake_rpc.call(form_data)
-        #MUST STRIP THE BODY CHARS ADDED BY RABBIT MQ, AND NULL TERMINATOR
-        response = response[2:-1]
-        response = json.loads(response)
-        print(" [.] Got %r" % response)
-        for loc in response:
-            print(response[loc])
-        return redirect(url_for('home', response=response))
 
 
 def getMilkshakeWeather(loc_data):
@@ -157,8 +146,6 @@ def retrieveShowWeather(session):
         print("Reading showWeather from Session")
         showWeather = session["weather-box"]
     return showWeather
-
-
 
 
 if __name__=='__main__':
