@@ -15,34 +15,14 @@ app.config['SECRET_KEY'] = '5d8d01ee0f29e7ad312f7ce37568e551'
 @app.route('/')
 @app.route('/home', methods=['POST', 'GET'])
 def home():
-    loc_data = request.form.get('modal-input')
-    if request.method == 'POST':
-        #Search the restuaraunt choices from loc_data and store session
-        locationInfo = getLocationInformation(loc_data)
-        session["location-data"] = locationInfo
-        #Search the milkshake weather from loc_data and store session
-        milkshakeInfo = getMilkshakeWeather(loc_data)
-        session["weather-data"] = milkshakeInfo
-        return render_template('home.html', title='Home', locData=locationInfo, weatherData=milkshakeInfo)
-    #Load the cached results from json, if it exists
-    locData = None
-    weatherData = ''
-    #If cached data exists, render template with this data
-    if os.path.isfile('./milkshakeInfo.txt') and os.path.isfile('./locationData.json'):
-        with open('locationData.json', 'r') as f:
-            locData = json.loads(f.read())
-        with open('milkshakeInfo.txt', 'r') as f:
-            weatherData = f.read()
-        return render_template('home.html', title='Home', locData=locData, weatherData=weatherData)
-    #Otherwise check if sessions have been saved, and populate with that
-    elif 'location-data' in session and 'weather-data' in session:
-        location = session["location"]
-        weather = session["weather"]
-        return render_template('home.html', title='Home', locData=location, weatherData=weather)
-    #No cahced data, so render defaults
-    else:
-        print('No cached data to load')
-        return render_template('home.html', title='Home', locData=None, weatherData=None)
+
+    #Load session data, otherwise load cached data and render home page
+    locData = retrieveLocationData()
+    weatherData = retrieveWeatherData(session)
+    showCow = retrieveShowCow(session)
+    showWeather = retrieveShowWeather(session)
+
+    return render_template('home.html', title='Home', locData=locData, weatherData=weatherData, showCow=showCow, showWeather=showWeather)
 
 
 @app.route('/settings', methods=['POST', 'GET'])
@@ -50,13 +30,21 @@ def settings():
     if request.method == 'GET':
         return render_template('settings.html', title='Settings')
     if request.method == 'POST':
-        loc_data = request.form.get('location-input')
+        cowBox = request.form.get('cow-box')
+        print(cowBox)
+        session["cow-box"] = cowBox
+        weatherBox = request.form.get('weather-box')
+        print(weatherBox)
+        session["weather-box"] = weatherBox
         #Search the restuaraunt choices from loc_data and store session
-        locationInfo = getLocationInformation(loc_data)
-        session["location-data"] = locationInfo
-        #Search the milkshake weather from loc_data and store session
-        milkshakeInfo = getMilkshakeWeather(loc_data)
-        session["weather-data"] = milkshakeInfo
+        if request.form.get('location-input'):
+            loc_data = request.form.get('location-input')
+            print(loc_data)
+            locationInfo = getLocationInformation(loc_data)
+            session["location-data"] = locationInfo
+            #Search the milkshake weather from loc_data and store session
+            milkshakeInfo = getMilkshakeWeather(loc_data)
+            session["weather-data"] = milkshakeInfo
 
     return render_template('settings.html', title='Settings')
 
@@ -94,21 +82,66 @@ def settings_input():
 
 
 def getMilkshakeWeather(loc_data):
+    milkshakeInfo = None
     milkshake_rpc = WeatherRpcClient()
     milkshakeInfo = milkshake_rpc.call(loc_data)
-    milkshakeInfo = milkshakeInfo[2:-1]
-    inCity = ' in ' + loc_data + '\n'
-    milkshakeInfo += inCity
-    with open('milkshakeInfo.txt', 'w') as outfile:
-        outfile.write(milkshakeInfo)
+    if milkshakeInfo != None:
+        milkshakeInfo = milkshakeInfo[2:-1]
+        inCity = ' in ' + loc_data + '\n'
+        milkshakeInfo += inCity
+        #cache data for later use
+        with open('milkshakeInfo.txt', 'w') as outfile:
+            outfile.write(milkshakeInfo)
     return milkshakeInfo
 
 
 def getLocationInformation(loc_data):
+    response = None
+    if loc_data != None:
         milkshake_rpc = SendLocations.MilkshakeRpcClient()
         response = milkshake_rpc.call(loc_data)
         response = response[2:-1]
+        print(response)
         response = json.loads(response)
+    return response
+
+
+def retrieveWeatherData(session):
+    weatherData = None
+    if "weather-data" in session:
+        print("Reading weatherData from Session")
+        weatherData = session["weather-data"]
+    elif os.path.isfile('./milkshakeInfo.txt'):
+        with open('milkshakeInfo.txt', 'r') as f:
+            print("Reading weatherData from JSON")
+            weatherData = f.read()
+    return weatherData
+
+
+def retrieveLocationData():
+    locData = None
+    if os.path.isfile('./locationData.json'):
+        with open('locationData.json', 'r') as f:
+            print("Reading locationData from JSON")
+            locData = json.loads(f.read())
+    return locData
+
+
+def retrieveShowCow(session):
+    showCow = None
+    if "cow-box" in session:
+        print("Reading showCow from Session")
+        showCow = session["cow-box"]
+    return showCow
+
+
+def retrieveShowWeather(session):
+    showWeather = None
+    if "weather-box" in session:
+        print("Reading showWeather from Session")
+        showWeather = session["weather-box"]
+    return showWeather
+
 
 if __name__=='__main__':
     #If executed from python directly, do so in debug mode

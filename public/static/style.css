@@ -49,11 +49,10 @@ label {
 }
 
  input[type=submit]{
-     align-self: center;
      color: white;
      margin: 5px;
      padding: 10px;
-     background-color: #81c9e8;
+     background-color: #44a8d3;
      border-radius: 50px;
      border: 4px solid;
      border-color: white;
@@ -65,6 +64,10 @@ label {
  }
 
  input[type=text]{
+     float: right;
+ }
+
+ input[type=checkbox]{
      float: right;
  }
 
@@ -82,11 +85,20 @@ label {
     display: none !important;
 }
 
-.close{
+.cow-box {
+
+}
+
+.weather-box {
+
+}
+
+.close-button {
     color: black;
-    position: absolute;
+    font-weight: bold;
+    position: relative;
     top: 0;
-    right: 14px;
+    right: 0px;
     font-size: 42;
     transform: rotate(45deg);
     cursor:pointer;
@@ -194,16 +206,13 @@ main#homepage{
     background-color: white;
     max-width: 100%;
     max-height: 100%;
-    margin: 15px;
+    margin: 20px;
     padding: 10px;
     border-radius: 25px;
     box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.25);
 }
 
-.select-container label{
-    max-width: 100%;
-    max-height: 100%;
-    clear: both;
+.select-container {
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
@@ -213,6 +222,26 @@ main#homepage{
     border-color: None;
     padding: 15px;
     box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.settings-container {
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #81c9e8;
+    border-radius: 12px;
+    border-color: None;
+    padding: 15px;
+    box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.settings-table {
+    text-align: left;
+    vertical-align: middle;
+    max-width: 100%;
+    max-height: 100%;
+    padding: 5px;
 }
 
 .cow-container{
@@ -303,6 +332,7 @@ main#homepage{
     font-family: Verdana, monospace;
     font-weight: bold;
     color: white;
+    background-color: #44a8d3;
 }
 
 #page-title{
@@ -320,12 +350,12 @@ main#homepage{
 }
 
 #checkbox-style{
-    display: inline-block;
-    vertical-align: middle;
     color: white;
     background-color: #44a8d3;
+    padding: 5px;
+    margin-right: 8px;
     float: right;
-    min-width: 250px;
+    vertical-align: middle;
     transform : scale(2)
 }
 
@@ -337,12 +367,16 @@ main#homepage{
 
 
 #my-location{
+    display: block;
     background-color: white;
-    display: inline-block;
     vertical-align: middle;
+    align-self: auto;
+    margin-left: 10px;
+    margin-right: 0px;
     color: black;
     float: right;
-    width: 100px;
+    padding: 5px;
+    /* transform : scale(1.2) */
 }
 
 #alt-location-choice{
@@ -371,8 +405,9 @@ main#homepage{
     align-items: center;
 }
 
-.modal-content{
+.modal-content {
     width: 50vw;
     height: 50vh;
     background-color: white;
+    text-align: center;
 }

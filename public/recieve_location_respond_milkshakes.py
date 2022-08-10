@@ -86,8 +86,8 @@ def callback(ch, method, props, body):
     """
     bod_str = str(body)
 
-    #perform the web scraping search, format results, and send message through channel
-    locationNames = (searchCityState(city_state))
+    #Scrape locations, format results, and send message through channel
+    locationNames = (searchCityState(bod_str))
     locationFormatted = locationJson(locationNames)
 
     if locationFormatted != None:
@@ -95,12 +95,12 @@ def callback(ch, method, props, body):
         print("Generating reponse!")
     else:
         response = "Request Failed"
-        return "Something went wrong with response. Delivery failed."
+        return None
     #Important to dump json here for JSON to send properly, must load on other end
     ch.basic_publish(exchange='', routing_key=props.reply_to,
         properties=pika.BasicProperties(correlation_id = props.correlation_id),body=json.dumps(response))
-
     ch.basic_ack(delivery_tag=method.delivery_tag)
+    print('Message sent!')
 
 #Begin consuming incoming messages indefinitely
 channel.basic_qos(prefetch_count=1)
