@@ -18,8 +18,6 @@ def searchCityState(city_state, driver=None):
     #if not passed in, default driver is installed from chrome server (slower)
     if driver == None:
         driver = getUpdatedDriver()
-
-    #Initiate search terms
     searchId = 'q' #google search box identifier
     driver.get("https://www.google.com")
     search_box = driver.find_element('name', searchId)
@@ -28,11 +26,10 @@ def searchCityState(city_state, driver=None):
 
     namesId = 'OSrXXb' #div class on page that hold restaurant names
     locationNames = getLocationNames(driver, namesId)
-
     return locationNames
 
 
-def locationJson(locationNames):
+def locationNamesJson(locationNames, fileName='locationData'):
     #Directly write in values becuase they always come in 3's
     locationDict = {
         "loc1" : None,
@@ -45,9 +42,10 @@ def locationJson(locationNames):
         locationDict["loc2"] = locationNames[1].replace("'","").replace('"', '')
         locationDict["loc3"] = locationNames[2].replace("'","").replace('"', '')
     #Output to JSON for cached access
-    with open('locationData.json', 'w') as outfile:
+    fileName += '.json'
+    with open(fileName, 'w') as outfile:
         json.dump(locationDict, outfile, indent = 4)
-        print("Creating JSON file from location data...")
+        print("Creating JSON file with location names...(locationData.json)")
 
     return locationDict
 
@@ -73,17 +71,37 @@ def initWebDriver(path=None):
     return driver
 
 
-def getLocationNames(driver, div):
+def allDataJson(allData, locationNames):
+    locInfo = {}
+    for name in locationNames:
+        locInfo[name] = None
+    for location in allData:
+        for name in locationNames:
+            if name in location:
+                dataArr = location.split('\n')
+                locInfo[name] = dataArr
+                print("locInfo["+name+"]:", locInfo[name])
+    with open('allData.json', 'w') as outfile:
+        json.dump(locInfo, outfile, indent = 4)
+        print("Creating JSON file from all locData...(allData.json)")
+    allData = None
+
+
+def getLocationNames(driver, elementId):
     try:
         #Wait 10 secs for main div to appear before searching
         main = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CLASS_NAME, 'main'))
         )
-        body = main.find_element(By.CLASS_NAME, 'e9EfHf') #Main body div
-        locations = body.find_elements(By.CLASS_NAME, 'rllt__details')#contains locations
+        #Main body div
+        body = main.find_element(By.CLASS_NAME, 'e9EfHf')
+        #div containing location details
+        locations = body.find_elements(By.CLASS_NAME, 'rllt__details')
+        allData = []
         locationNames = []
         for location in locations:
-            restaurant_name = location.find_element(By.CLASS_NAME, div)
+            allData.append(location.text)
+            restaurant_name = location.find_element(By.CLASS_NAME, elementId)
             if restaurant_name is not None:
                 locationNames.append(restaurant_name.text)
                 print(restaurant_name.text)
@@ -94,8 +112,9 @@ def getLocationNames(driver, div):
         return None
     finally:
         driver.quit()
-
+    allDataJson(allData, locationNames)
     return locationNames
+
 
 #RabbitMQ, initialize communication pipeline
 connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
@@ -104,17 +123,11 @@ channel.queue_declare(queue='myMilkShakes')
 channel.queue_purge('myMilkShakes')
 
 def callback(ch, method, props, body):
-    """
-    Messaging queue. Recieves location and responds with milkshake Restaurants
-    in the area
-    """
     bod_str = str(body)
-
-
     driver = initWebDriver(PATH)
     #Scrape locations, format results, and send message through channel
     locationNames = (searchCityState(bod_str, driver=driver))
-    locationFormatted = locationJson(locationNames)
+    locationFormatted = locationNamesJson(locationNames)
 
     if locationFormatted != None:
         response = locationFormatted

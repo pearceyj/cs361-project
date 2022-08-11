@@ -239,7 +239,14 @@ main#homepage{
 
 
 .settings-modal {
-    visibility: hidden;
+    display: none;
+}
+
+.cowInfo-modal {
+    z-index: 3;
+    top: 50%;
+    left: 50%;
+    display: none;
 }
 
 .settings-table {
@@ -411,6 +418,15 @@ main#homepage{
     justify-content: center;
     align-items: center;
 }
+
+.center{
+ position: absolute;
+ float: left;
+ left: 50%;
+ top: 50%;
+ transform: translate(-50%, -50%);
+}
+
 
 .modal-content {
     width: 50vw;

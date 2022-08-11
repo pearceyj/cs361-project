@@ -19,7 +19,8 @@ def index():
         if request.form.get('modal-location'):
             updateLocation(session, request.form.get('modal-location'))
             return redirect(url_for('home'))
-    return render_template('home.html', title='index', locData=None, weatherData=None, showCow=None, showWeather="off", showLocationModal = True)
+    return render_template('home.html', title='index', locData=None, weatherData=None,
+                            showCow=None, showWeather="off", showLocationModal = True)
 
 
 @app.route('/home', methods=['POST', 'GET'])
@@ -31,11 +32,18 @@ def home():
         if request.form.get('location-input'):
             updateLocation(session, request.form.get('location-input'))
     #Load session data or cached data and render home page
-    locData = retrieveLocationData()
+    allLocData = retrieveAllLocData()
+    locNames = retrieveLocationNames()
     weatherData = retrieveWeatherData(session)
     showCow = retrieveShowCow(session)
     showWeather = retrieveShowWeather(session)
-    return render_template('home.html', title='Home', locData=locData, weatherData=weatherData, showCow=showCow, showWeather=showWeather)
+    return render_template('home.html',
+                            title='Home',
+                            allLocData=allLocData,
+                            locNames=locNames,
+                            weatherData=weatherData,
+                            showCow=showCow,
+                            showWeather=showWeather)
 
 
 @app.route('/settings', methods=['POST', 'GET'])
@@ -50,16 +58,6 @@ def settings():
             updateLocation(session, request.form.get('location-input'))
     return redirect(url_for('home'))
     # return render_template('settings.html', title='Settings')
-
-
-@app.route('/locations', methods=['POST', 'GET'])
-def locations():
-    return render_template('locations.html', title='Locations')
-
-
-@app.route('/information', methods=['POST', 'GET'])
-def information():
-    return render_template('information.html', title='Information')
 
 
 def getMilkshakeWeather(loc_data):
@@ -90,50 +88,59 @@ def getLocationInformation(loc_data):
 def retrieveWeatherData(session):
     weatherData = None
     if "weather-data" in session:
-        print("Reading weatherData from Session")
+        print("Reading weatherData from Session...")
         weatherData = session["weather-data"]
     elif os.path.isfile('./milkshakeInfo.txt'):
         with open('milkshakeInfo.txt', 'r') as f:
-            print("Reading weatherData from JSON")
+            print("Reading cached weatherData...")
             weatherData = f.read()
     return weatherData
 
 
 def updateLocation(session, locData):
-    print('Updating location and weather message from form input')
-    print(loc_data)
-    locationInfo = getLocationInformation(loc_data)
+    print('Updating location and weather message from form input...')
+    print(locData)
+    locationInfo = getLocationInformation(locData)
     session["location-data"] = locationInfo
     #Search the milkshake weather from loc_data and store session
-    milkshakeInfo = getMilkshakeWeather(loc_data)
+    milkshakeInfo = getMilkshakeWeather(locData)
     session["weather-data"] = milkshakeInfo
 
 
 def updateWeatherOption(session, weatherBox):
-    print('Updating weather message option')
+    print('Updating weather message option...')
     print("weatherBox option: ", weatherBox)
     session["weather-box"] = weatherBox
 
 
 def updateCowOption(session, cowBox):
-    print('Updating review cow option')
+    print('Updating review cow option...')
     print("cowBox option: ", cowBox)
     session["cow-box"] = cowBox
 
 
-def retrieveLocationData():
+def retrieveLocationNames():
     locData = None
     if os.path.isfile('./locationData.json'):
         with open('locationData.json', 'r') as f:
-            print("Reading cached locationData")
+            print("Reading cached locationData...")
             locData = json.loads(f.read())
     return locData
+
+
+def retrieveAllLocData():
+    allLocData = None
+    if os.path.isfile('./allData.json'):
+        with open('allData.json', 'r') as f:
+            print("Reading all cached data for each restaurant...")
+            allLocData = json.loads(f.read())
+    return allLocData
 
 
 def retrieveShowCow(session):
     showCow = None
     if "cow-box" in session:
-        print("Reading showCow from Session")
+        print("Reading showCow from Session...")
         showCow = session["cow-box"]
     return showCow
 
@@ -141,7 +148,7 @@ def retrieveShowCow(session):
 def retrieveShowWeather(session):
     showWeather = None
     if "weather-box" in session:
-        print("Reading showWeather from Session")
+        print("Reading showWeather from Session...")
         showWeather = session["weather-box"]
     return showWeather
 

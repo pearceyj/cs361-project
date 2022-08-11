@@ -12,7 +12,8 @@
 
     <body>
         {% block locationModal %}{% endblock %}
-        {% block settingsModal %}{% endblock %}
+        <div class="settings-modal">{% block settingsModal %}{% endblock %}</div>
+        <div class="cowInfo-modal">{% block cowInfoModal %}{% endblock %}</div>
         <!-- Main title image-->
         <main id="homepage tiled-sprinkles">
             <div id="app-name">
@@ -28,13 +29,17 @@
             <div id="modal-view-container">
                 <div class="nav-container">
                     <button type="button" id="nav-button" onclick="window.location.href='{{ url_for( 'home') }}';">Home</button>
-                    <button type="button" id="nav-button" onclick="window.location.href='{{ url_for( 'information') }}';">Information</button>
-                    <!-- <button type="button" id="nav-button" onclick="window.location.href='{{ url_for( 'settings') }}';">Settings</button> -->
-                    <button type="button" id="nav-button" onclick="toggle_settingsModal()">Settings</button>
+                    <button type="button" id="nav-button" onclick="toggle_settingsModal('.cowInfo-modal')">Information</button>
+                    <button type="button" id="nav-button" onclick="toggle_settingsModal('.settings-modal')">Settings</button>
                     <script type="text/javascript">
-                        function toggle_settingsModal(){
-                            modal = document.querySelector('.settings-modal');
-                            modal.style.visibility = 'visible'
+                        function toggle_settingsModal(modalType){
+                            modal = document.querySelector(modalType)
+                            if(modal.style.display = "none"){
+                                modal.style.display = "block"
+                            }
+                            else {
+                                modal.style.visibility = "none"
+                            }
                         }
                     </script>
                 </div>

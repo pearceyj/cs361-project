@@ -1,14 +1,20 @@
 {% extends "index.html" %}
 {% block content %}
     <div class="cow-container">
-    {% if locData != None %}
-        {% for loc in locData %}
-            <button id="select-choice-button">{{ locData[loc] }}</button>
+    {% if locNames != None %}
+        {% for name in locNames %}
+            <button id="select-choice-button">{{ locNames[name] }}</button>
         {% endfor %}
     {% else %}
         <button id="select-choice-button">McDonald's</button>
         <button id="select-choice-button">Burgerville</button>
         <button id="select-choice-button">Dairy Queen</button>
+        <script type="text/javascript">
+            function toggle_info(){
+                modal = document.querySelector('.cowInfo-modal');
+                modal.style.visibility = 'visible'
+            }
+        </script>
     {% endif %}
     </div>
 {% endblock %}
@@ -44,4 +50,16 @@
         <!-- popup modal for settings -->
         {% include 'settingsModal.html' %}
     </div>
+{% endblock %}
+
+{% block cowInfoModal %}
+    {% if showCow == "on" %}
+        <div class="center select-outer-container">
+            <div class="select-container">
+                {% for place in allLocData %}
+                    <div>{{ allLocData[place] }}</div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}
